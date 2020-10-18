@@ -3,6 +3,7 @@ package com.zup.zupbank.controllers;
 
 import com.zup.zupbank.models.Conta;
 import com.zup.zupbank.services.ContaService;
+import com.zup.zupbank.services.SessionService;
 import com.zup.zupbank.utils.Validation;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.http.*;
@@ -12,6 +13,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.net.URI;
 
 @RestController
@@ -29,7 +31,7 @@ public class ContaController {
 
     @PostMapping(value = "/nova", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity novaConta(@RequestBody Conta conta){
+    public ResponseEntity novaConta(@RequestBody Conta conta, HttpSession session){
 
         if(!ContaService.checkPasso1(conta)){
             return new ResponseEntity(conta, HttpStatus.BAD_REQUEST);
@@ -39,9 +41,8 @@ public class ContaController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, location.toString());
         headers.setLocation(location);
-
+        SessionService.setSessionAttributePasso1(session, conta);
         return new ResponseEntity( headers, HttpStatus.CREATED);
-        //TODO: else com status 400 e json com as informacoes
     }
 
 }
