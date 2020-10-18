@@ -1,35 +1,36 @@
 package com.zup.zupbank.services;
 
-import com.zup.zupbank.models.Conta;
+
+import com.zup.zupbank.models.Pessoa;
 import com.zup.zupbank.utils.Validation;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContaService {
 
-    public static Boolean checkPasso1(Conta conta){
+    public static Boolean checkPasso1(Pessoa pessoa){
 
         Validation validador = new Validation();
 
-        if(conta.getNome().trim().equals("")){
+        if(pessoa.getNome().trim().equals("")){
             return false;
         }
-        if(conta.getSobrenome().trim().equals("")){
+        if(pessoa.getSobrenome().trim().equals("")){
             return false;
         }
-        if(!Validation.checkEmail(conta.getEmail()) ) {
+        if(!Validation.checkEmail(pessoa.getEmail()) ) {
             return false;
         }
-        if(validador.checkEmailExists(conta.getEmail())){
+        if(validador.checkEmailExists(pessoa.getEmail())){
             return false;
         }
-        if(!Validation.checkCPF(conta.getCpf()) ) {
+        if(!Validation.checkCPF(pessoa.getCpf()) ) {
             return false;
         }
-        if(validador.checkCPFExists(conta.getCpf())){
+        if(validador.checkCPFExists(pessoa.getCpf())){
             return false;
         }
-        if(!Validation.checkMaioridade(conta.getDataNascimento())){
+        if(!Validation.checkMaioridade(pessoa.getDataNascimento())){
             return false;
         }
         return true;
