@@ -41,27 +41,21 @@ public class ContaService {
 
         Validation validador = new Validation();
 
-//        if(pessoa.getNome().trim().equals("")){
-//            return false;
-//        }
-//        if(pessoa.getSobrenome().trim().equals("")){
-//            return false;
-//        }
-//        if(!Validation.checkEmail(pessoa.getEmail()) ) {
-//            return false;
-//        }
-//        if(validador.checkEmailExists(pessoa.getEmail())){
-//            return false;
-//        }
-//        if(!Validation.checkCPF(pessoa.getCpf()) ) {
-//            return false;
-//        }
-//        if(validador.checkCPFExists(pessoa.getCpf())){
-//            return false;
-//        }
-//        if(!Validation.checkMaioridade(pessoa.getDataNascimento())){
-//            return false;
-//        }
+        if(endereco.getCep() == 0L){
+            return false;
+        }
+        if(endereco.getRua().trim().equals("")){
+            return false;
+        }
+        if(endereco.getRua().trim().equals("")){
+            return false;
+        }
+        if(endereco.getBairro().trim().equals("")){
+            return false;
+        }
+        if(endereco.getComplemento().trim().equals("")){
+            return false;
+        }
         return true;
     }
 

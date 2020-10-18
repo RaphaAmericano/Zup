@@ -14,7 +14,19 @@ public class Format {
     }
 
     public static Long FormatCPFStringToLong(String cpf ){
-        return 10L;
+        String[] cpfSplitBar = cpf.split("-");
+        String[] cpfSplitDot = cpfSplitBar[0].split("\\.");
+        String joinSplitDot = String.join("", cpfSplitDot);
+        String joinAll = joinSplitDot+cpfSplitBar[1];
+        long cpfStringToLong = Long.parseLong(joinAll);
+        return cpfStringToLong;
     }
 
+    public static String FormatCEPLongToString(long cep){
+        String cepStr = Long.toString(cep);
+        String parte1 = cepStr.substring(0, 5);
+        String parte2 = cepStr.substring(5, 8);
+        String cepToString = parte1+"-"+parte2;
+        return cepToString;
+    }
 }
