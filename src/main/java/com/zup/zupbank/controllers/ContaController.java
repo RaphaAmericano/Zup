@@ -2,6 +2,7 @@ package com.zup.zupbank.controllers;
 
 
 import com.zup.zupbank.models.Conta;
+import com.zup.zupbank.models.Endereco;
 import com.zup.zupbank.models.Pessoa;
 import com.zup.zupbank.services.ContaService;
 import com.zup.zupbank.services.SessionService;
@@ -46,4 +47,17 @@ public class ContaController {
         return new ResponseEntity( headers, HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "/passo2", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity novaContaPasso2(@RequestBody Endereco endereco, HttpSession session){
+        if(!ContaService.checkPasso2(endereco)){
+            return new ResponseEntity(endereco, HttpStatus.BAD_REQUEST);
+        }
+        URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo3").build().toUri();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.LOCATION, location.toString());
+        headers.setLocation(location);
+        SessionService.setSessionAttributePasso2(session, endereco);
+        return new ResponseEntity( headers, HttpStatus.CREATED);
+    }
 }
