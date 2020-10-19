@@ -36,10 +36,10 @@ public class Validation {
         return checkcpf.isEmpty();
     }
 
-    public static Boolean checkMaioridade(Date data){
+    public static Boolean checkMaioridade(LocalDate data){
         LocalDate hoje = LocalDate.now();
-        LocalDate aniversario = data.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Period maioridade = Period.between(aniversario, hoje);
+//        LocalDate aniversario = data.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Period maioridade = Period.between(data, hoje);
         return maioridade.getYears() >= 18;
     }
 

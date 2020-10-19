@@ -18,6 +18,7 @@ public class SessionController {
         System.out.println(session.getAttribute("nome"));
         System.out.println(session.getAttribute("sobrenome"));
         System.out.println(session.getAttribute("cpf"));
+        System.out.println(session.getAttribute("dataNascimento"));
         System.out.println(session.getAttribute("email"));
         System.out.println(session.getAttribute("cep"));
         System.out.println(session.getAttribute("rua"));
@@ -25,7 +26,7 @@ public class SessionController {
         System.out.println(session.getAttribute("complemento"));
         System.out.println(session.getAttribute("cidade"));
         System.out.println(session.getAttribute("estado"));
-        return "Ping";
+        return "Ping Session";
     }
 
     @GetMapping("/invalidate")

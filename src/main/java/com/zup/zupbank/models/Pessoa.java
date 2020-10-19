@@ -1,12 +1,13 @@
 package com.zup.zupbank.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Pessoa {
     private String nome;
     private String sobrenome;
     private String email;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private long cpf;
 
     public String getNome() {
@@ -33,11 +34,11 @@ public class Pessoa {
         this.email = email;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

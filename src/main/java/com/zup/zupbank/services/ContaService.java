@@ -6,6 +6,8 @@ import com.zup.zupbank.models.Pessoa;
 import com.zup.zupbank.utils.Validation;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class ContaService {
 

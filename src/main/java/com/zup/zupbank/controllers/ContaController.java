@@ -38,7 +38,6 @@ public class ContaController {
         if(!ContaService.checkPasso1(pessoa)){
             return new ResponseEntity(pessoa, HttpStatus.BAD_REQUEST);
         }
-
         URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo2").build().toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, location.toString());
@@ -52,6 +51,21 @@ public class ContaController {
     public ResponseEntity novaContaPasso2(@RequestBody Endereco endereco, HttpSession session){
         if(!ContaService.checkPasso2(endereco)){
             return new ResponseEntity(endereco, HttpStatus.BAD_REQUEST);
+        }
+
+        Pessoa sessionPessoa;
+        try {
+            sessionPessoa = SessionService.createSessionPessoa(session);
+        }catch (Exception e){
+            return new ResponseEntity(endereco, HttpStatus.BAD_REQUEST);
+        }
+
+        if(!ContaService.checkPasso1(sessionPessoa)){
+            Conta conta = new Conta();
+            conta.setPessoa(sessionPessoa);
+            conta.setEndereco(endereco);
+
+            return new ResponseEntity(conta, HttpStatus.BAD_REQUEST);
         }
         URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo3").build().toUri();
         HttpHeaders headers = new HttpHeaders();
