@@ -5,6 +5,7 @@ import com.zup.zupbank.models.Endereco;
 import com.zup.zupbank.models.Pessoa;
 import com.zup.zupbank.services.ContaService;
 import com.zup.zupbank.services.SessionService;
+import com.zup.zupbank.utils.RequestResponseFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,11 +40,7 @@ public class ContaController {
             retorno.put("Mensagem", ContaService.checkPasso1(pessoa).get(false));
             return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
         }
-
-        URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo2").build().toUri();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, location.toString());
-        headers.setLocation(location);
+        HttpHeaders headers = RequestResponseFormat.setHeaderLocation("localhost", 8080, "/passo2");
         SessionService.setSessionAttributePasso1(session, pessoa);
         return new ResponseEntity( headers, HttpStatus.CREATED);
     }
@@ -71,10 +68,8 @@ public class ContaController {
             retorno.put("Mensagem", ContaService.checkPasso1(sessionPessoa).get(false));
             return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
         }
-        URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo3").build().toUri();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, location.toString());
-        headers.setLocation(location);
+
+        HttpHeaders headers = RequestResponseFormat.setHeaderLocation("localhost", 8080, "/passo3");
         SessionService.setSessionAttributePasso2(session, endereco);
         return new ResponseEntity( headers, HttpStatus.CREATED);
     }
@@ -118,10 +113,7 @@ public class ContaController {
         }
 
         // Finaliza a verificacao e segue o cadastro
-        URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo4").build().toUri();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, location.toString());
-        headers.setLocation(location);
+        HttpHeaders headers = RequestResponseFormat.setHeaderLocation("localhost", 8080, "/passo4");
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
