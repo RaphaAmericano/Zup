@@ -37,6 +37,10 @@ public class SessionService {
         session.setAttribute("estado", endereco.getEstado());
     }
 
+    public static void setSessionAttributePasso3(HttpSession session, byte[] fileBytes ){
+        session.setAttribute("foto_cpf", fileBytes);
+    }
+
     public static void setStatusComplete(SessionStatus status){
         status.setComplete();
     }

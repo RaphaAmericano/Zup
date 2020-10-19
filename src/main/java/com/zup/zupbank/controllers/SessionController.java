@@ -26,6 +26,7 @@ public class SessionController {
         System.out.println(session.getAttribute("complemento"));
         System.out.println(session.getAttribute("cidade"));
         System.out.println(session.getAttribute("estado"));
+        System.out.println(session.getAttribute("foto_cpf"));
         return "Ping Session";
     }
 

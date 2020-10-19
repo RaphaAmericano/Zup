@@ -10,17 +10,24 @@ import com.zup.zupbank.utils.Validation;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("conta")
 public class ContaController {
+
+    private static String UPLOADED_FOLDER = "/temp/";
 
     @GetMapping
     public ResponseEntity<String> ping(){
@@ -74,4 +81,24 @@ public class ContaController {
         SessionService.setSessionAttributePasso2(session, endereco);
         return new ResponseEntity( headers, HttpStatus.CREATED);
     }
+
+    @PostMapping(value = "/passo3", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity novaContaPasso3(@RequestParam("file") MultipartFile file, HttpSession session ){
+
+        if(file.isEmpty()){
+            return new ResponseEntity("Vazio", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            byte[] bytes = file.getBytes();
+            SessionService.setSessionAttributePasso3(session, bytes);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+        return new ResponseEntity( HttpStatus.CREATED);
+    }
+
 }

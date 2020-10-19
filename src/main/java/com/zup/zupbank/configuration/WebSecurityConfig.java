@@ -16,7 +16,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 //                .addFilterAfter(new CsrfLoggerFilter(), CsrfFilter.class)
                 .authorizeRequests()
                 //Permite acesso a rota sem autenticacao
-                .antMatchers("/conta/nova","/conta/passo2", "/conta", "/auth/csrf", "/session/**").permitAll()
+                .antMatchers("/conta/**", "/auth/csrf", "/session/**").permitAll()
                 //bloqueia as rotas em diante
                 .anyRequest().authenticated();
     }
