@@ -56,4 +56,15 @@ public class SessionService {
         return pessoa;
     }
 
+    public static Endereco createSessionEndereco(HttpSession session ){
+        Endereco endereco = new Endereco();
+        endereco.setCep(Long.parseLong(session.getAttribute("cep").toString()));
+        endereco.setRua(session.getAttribute("rua").toString());
+        endereco.setBairro(session.getAttribute("bairro").toString());
+        endereco.setComplemento(session.getAttribute("complemento").toString());
+        endereco.setCidade(session.getAttribute("cidade").toString());
+        endereco.setComplemento(session.getAttribute("estado").toString());
+        return endereco;
+    }
+
 }

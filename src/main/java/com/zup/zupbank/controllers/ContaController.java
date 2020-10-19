@@ -22,6 +22,8 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("conta")
@@ -86,10 +88,33 @@ public class ContaController {
     @ResponseBody
     public ResponseEntity novaContaPasso3(@RequestParam("file") MultipartFile file, HttpSession session ){
 
+        // Verifica se o arquivo é vazio
         if(file.isEmpty()){
-            return new ResponseEntity("Vazio", HttpStatus.BAD_REQUEST);
+            Map<String, String> retorno =  new HashMap<String, String>();
+            retorno.put("Mensagem", "Arquivo vazio");
+            return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
         }
 
+        // Verifica a existencia dos dados da pessoa no session
+        Pessoa pessoaSession;
+        try{
+            pessoaSession = SessionService.createSessionPessoa(session);
+        }catch(Exception e){
+            Map<String, String> retorno =  new HashMap<String, String>();
+            retorno.put("Mensagem", "Erro no passo 1");
+            return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
+        }
+        // Verifica a existencia dos dados de endereco da pessoa no session
+        Endereco enderecoSession;
+        try {
+            enderecoSession = SessionService.createSessionEndereco(session);
+        } catch (Exception e){
+            Map<String, String> retorno =  new HashMap<String, String>();
+            retorno.put("Mensagem", "Erro no passo 2");
+            return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
+        }
+
+        // Armazena a foto em bytes na session
         try {
             byte[] bytes = file.getBytes();
             SessionService.setSessionAttributePasso3(session, bytes);
@@ -97,8 +122,13 @@ public class ContaController {
             e.printStackTrace();
         }
 
+        // Finaliza a verificacao e segue o cadastro
+        URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo4").build().toUri();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.LOCATION, location.toString());
+        headers.setLocation(location);
 
-        return new ResponseEntity( HttpStatus.CREATED);
+        return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
 }
