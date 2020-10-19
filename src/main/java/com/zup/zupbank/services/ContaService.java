@@ -7,58 +7,73 @@ import com.zup.zupbank.utils.Validation;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ContaService {
 
-    public static Boolean checkPasso1(Pessoa pessoa){
+    public static Map<Boolean, String> checkPasso1(Pessoa pessoa){
 
         Validation validador = new Validation();
+
+        Map<Boolean, String> retorno = new HashMap<Boolean, String>();
 
         if(pessoa.getNome().trim().equals("")){
-            return false;
+            retorno.put(false, "Nome inválido");
+            return retorno;
         }
         if(pessoa.getSobrenome().trim().equals("")){
-            return false;
+            retorno.put(false, "Sobrenome inválido");
+            return retorno;
         }
         if(!Validation.checkEmail(pessoa.getEmail()) ) {
-            return false;
+            retorno.put(false, "Email inválido");
+            return retorno;
         }
         if(validador.checkEmailExists(pessoa.getEmail())){
-            return false;
+            retorno.put(false, "Email já cadastrado");
+            return retorno;
         }
         if(!Validation.checkCPF(pessoa.getCpf()) ) {
-            return false;
+            retorno.put(false, "CPF inválido");
+            return retorno;
         }
         if(validador.checkCPFExists(pessoa.getCpf())){
-            return false;
+            retorno.put(false, "CPF já cadastrado");
+            return retorno;
         }
         if(!Validation.checkMaioridade(pessoa.getDataNascimento())){
-            return false;
+            retorno.put(false, "Cadastro inválido. É preciso ser maior de idade.");
+            return retorno;
         }
-        return true;
+        retorno.put(true, "Dados validados");
+        return retorno;
     }
 
-    public static Boolean checkPasso2(Endereco endereco){
+    public static Map<Boolean, String> checkPasso2(Endereco endereco){
 
         Validation validador = new Validation();
+        Map<Boolean, String> retorno = new HashMap<Boolean, String>();
 
-        if(endereco.getCep() == 0L){
-            return false;
+        if(endereco.getCep() <= 0L){
+            retorno.put(false, "CEP inválido");
+            return retorno;
         }
         if(endereco.getRua().trim().equals("")){
-            return false;
-        }
-        if(endereco.getRua().trim().equals("")){
-            return false;
+            retorno.put(false, "Rua inválida");
+            return retorno;
         }
         if(endereco.getBairro().trim().equals("")){
-            return false;
+            retorno.put(false, "Bairro inválido");
+            return retorno;
         }
         if(endereco.getComplemento().trim().equals("")){
-            return false;
+            retorno.put(false, "Complemento inválido");
+            return retorno;
         }
-        return true;
+        retorno.put(true, "Dados validados");
+        return retorno;
     }
 
 }

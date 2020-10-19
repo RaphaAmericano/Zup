@@ -1,27 +1,17 @@
 package com.zup.zupbank.controllers;
 
-
 import com.zup.zupbank.models.Conta;
 import com.zup.zupbank.models.Endereco;
 import com.zup.zupbank.models.Pessoa;
 import com.zup.zupbank.services.ContaService;
 import com.zup.zupbank.services.SessionService;
-import com.zup.zupbank.utils.Validation;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,9 +34,12 @@ public class ContaController {
     @ResponseBody
     public ResponseEntity novaConta(@RequestBody Pessoa pessoa, HttpSession session){
 
-        if(!ContaService.checkPasso1(pessoa)){
-            return new ResponseEntity(pessoa, HttpStatus.BAD_REQUEST);
+        if(ContaService.checkPasso1(pessoa).get(false) != null){
+            Map<String, String> retorno = new HashMap<String, String>();
+            retorno.put("Mensagem", ContaService.checkPasso1(pessoa).get(false));
+            return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
         }
+
         URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo2").build().toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, location.toString());
@@ -58,23 +51,25 @@ public class ContaController {
     @PostMapping(value = "/passo2", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity novaContaPasso2(@RequestBody Endereco endereco, HttpSession session){
-        if(!ContaService.checkPasso2(endereco)){
-            return new ResponseEntity(endereco, HttpStatus.BAD_REQUEST);
+        if(ContaService.checkPasso2(endereco).get(false) != null){
+            Map<String, String> retorno = new HashMap<String, String>();
+            retorno.put("Mensagem", ContaService.checkPasso2(endereco).get(false));
+            return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
         }
 
         Pessoa sessionPessoa;
         try {
             sessionPessoa = SessionService.createSessionPessoa(session);
         }catch (Exception e){
-            return new ResponseEntity(endereco, HttpStatus.BAD_REQUEST);
+            Map<String, String> retorno = new HashMap<String, String>();
+            retorno.put("Mensagem", "Os dados pessoais não foram preenchidos");
+            return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
         }
 
-        if(!ContaService.checkPasso1(sessionPessoa)){
-            Conta conta = new Conta();
-            conta.setPessoa(sessionPessoa);
-            conta.setEndereco(endereco);
-
-            return new ResponseEntity(conta, HttpStatus.BAD_REQUEST);
+        if(ContaService.checkPasso1(sessionPessoa).get(false) != null){
+            Map<String, String> retorno = new HashMap<String, String>();
+            retorno.put("Mensagem", ContaService.checkPasso1(sessionPessoa).get(false));
+            return new ResponseEntity(retorno, HttpStatus.BAD_REQUEST);
         }
         URI location = UriComponentsBuilder.newInstance().scheme("http").host("localhost").port(8080).path("/passo3").build().toUri();
         HttpHeaders headers = new HttpHeaders();
