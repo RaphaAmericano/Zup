@@ -169,19 +169,25 @@ public class ContaController {
             retorno.put("mensagem", ContaService.checkPasso3(proposta.getFoto_cpf()).get(false));
             return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
+        String assunto;
+        String conteudo;
+        Map<String, String> emailContent;
         if(aceite.get("aceite")){
-            //TODO: enviar o email
+            Conta conta = new Conta(proposta);
+            this.contaService.novaConta(conta);
 
-            //TODO: criar o objeto conta com a proposta
-
-//            this.contaService.novaConta(proposta);
+            emailContent = MailService.mailContent(conta);
             retorno.put("Mensagem", "Um email será enviado");
-            mailService.sendEmail();
+            mailService.sendEmail(emailContent.get("destinatario").toString(), emailContent.get("assunto").toString(), emailContent.get("conteudo").toString() );
             return new ResponseEntity(retorno, HttpStatus.OK);
         }
         //TODO: enviar o email implorando o aceitar fazer a conta
         contaService.novaProposta(proposta);
+        assunto = "Reconsidere abrir uma conta em nosso banco";
+        conteudo = "Olá "+ proposta.getPessoa().getNome()+
+                "! Tudo bem? Vimos que você não concluiu seu cadastro conosoco\r\n" +
+                "Reconsidere abrir uma conta conosco...";
+        mailService.sendEmail(proposta.getPessoa().getEmail(), assunto, conteudo);
         retorno.put("mensagem", "Proposta não aceita");
         return new ResponseEntity(retorno, HttpStatus.OK);
     }

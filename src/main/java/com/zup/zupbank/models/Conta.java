@@ -1,5 +1,7 @@
 package com.zup.zupbank.models;
 
+import java.util.Random;
+
 public class Conta {
 
     private Proposta proposta;
@@ -11,6 +13,16 @@ public class Conta {
 
     public Conta(Proposta proposta){
         this.proposta = proposta;
+        this.setRandomValues();
+        this.setSaldo(0.0);
+    }
+
+    private void setRandomValues(){
+        Random random = new Random();
+        this.setAgencia(random.nextInt( 10000));
+        this.setCodigoBanco(random.nextInt( 1000));
+        long numContaRandom = (long) (Math.random() * 100000000);
+        this.setNumeroConta(numContaRandom);
     }
 
     public Proposta getProposta() {
