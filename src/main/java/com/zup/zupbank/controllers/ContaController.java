@@ -118,4 +118,60 @@ public class ContaController {
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
+    @PostMapping( value = "/passo4", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity novaContaPasso4(@RequestBody Map<String, Boolean> aceite, HttpSession session ){
+        Map<String, String> retorno = new HashMap<String, String>();
+        Conta conta = new Conta();
+        Pessoa pessoa;
+        try{
+            pessoa = SessionService.createSessionPessoa(session);
+            conta.setPessoa(pessoa);
+        } catch(Exception e){
+            retorno.put("mensagem", "Os dados pessoais não foram preenchidos");
+            return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        Endereco endereco;
+        try {
+            endereco = SessionService.createSessionEndereco(session);
+            conta.setEndereco(endereco);
+        } catch(Exception e ){
+            retorno.put("mensagem", "Os dados de endereço não foram preenchidos");
+            return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            conta.setFoto_cpf(session.getAttribute("foto_cpf").toString().getBytes());
+        } catch(Exception e ){
+            retorno.put("mensagem", "O arquivo de foto do CPF não existe.");
+            return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        if(ContaService.checkPasso1(conta.getPessoa()).get(false) != null){
+            retorno.put("mensagem", ContaService.checkPasso1(conta.getPessoa()).get(false));
+            return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        if(ContaService.checkPasso2(conta.getEndereco()).get(false) != null){
+            retorno.put("mensagem", ContaService.checkPasso2(conta.getEndereco()).get(false));
+            return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        if(ContaService.checkPasso3(conta.getFoto_cpf()).get(false) != null){
+
+            retorno.put("mensagem", ContaService.checkPasso3(conta.getFoto_cpf()).get(false));
+            return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        if(aceite.get("aceite")){
+            //TODO: mensagem informando o envio de email
+            //criar a conta
+            // enviar email
+            retorno.put("Mensagem", "Um email será enviado");
+            return new ResponseEntity(retorno, HttpStatus.OK);
+        }
+        //TODO: registrar a proposta no sistema
+        //enviar o email implorando o aceitar fazer a conta
+        retorno.put("mensagem", "Proposta não aceita");
+        return new ResponseEntity(retorno, HttpStatus.OK);
+    }
+
 }

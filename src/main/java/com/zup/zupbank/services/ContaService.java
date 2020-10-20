@@ -76,4 +76,14 @@ public class ContaService {
         return retorno;
     }
 
+    public static Map<Boolean, String> checkPasso3(byte[] arquivo ){
+        Map<Boolean,String> retorno = new HashMap<Boolean, String>();
+        if(arquivo != null && arquivo.length > 0){
+            retorno.put(true, "Dados validados");
+            return retorno;
+        }
+        retorno.put(false, "Arquivo inválido");
+        return retorno;
+    }
+
 }
