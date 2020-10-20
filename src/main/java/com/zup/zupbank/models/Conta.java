@@ -1,40 +1,24 @@
 package com.zup.zupbank.models;
 
-
-import java.util.Date;
-
 public class Conta {
-    protected Pessoa pessoa;
-    protected Endereco endereco;
-    protected byte[] foto_cpf;
+
+    private Proposta proposta;
 
     private int agencia;
     private long numeroConta;
     private int codigoBanco;
     private double saldo;
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public Conta(Proposta proposta){
+        this.proposta = proposta;
     }
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public Proposta getProposta() {
+        return proposta;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public byte[] getFoto_cpf() {
-        return foto_cpf;
-    }
-
-    public void setFoto_cpf(byte[] foto_cpf) {
-        this.foto_cpf = foto_cpf;
+    public void setProposta(Proposta proposta) {
+        this.proposta = proposta;
     }
 
     public int getAgencia() {

@@ -128,11 +128,11 @@ public class ContaController {
     @ResponseBody
     public ResponseEntity novaContaPasso4(@RequestBody Map<String, Boolean> aceite, HttpSession session ){
         Map<String, String> retorno = new HashMap<String, String>();
-        Conta conta = new Conta();
+        Proposta proposta = new Proposta();
         Pessoa pessoa;
         try{
             pessoa = SessionService.createSessionPessoa(session);
-            conta.setPessoa(pessoa);
+            proposta.setPessoa(pessoa);
         } catch(Exception e){
             retorno.put("mensagem", "Os dados pessoais não foram preenchidos");
             return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -140,43 +140,44 @@ public class ContaController {
         Endereco endereco;
         try {
             endereco = SessionService.createSessionEndereco(session);
-            conta.setEndereco(endereco);
+            proposta.setEndereco(endereco);
         } catch(Exception e ){
             retorno.put("mensagem", "Os dados de endereço não foram preenchidos");
             return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         try {
-            conta.setFoto_cpf(session.getAttribute("foto_cpf").toString().getBytes());
+            proposta.setFoto_cpf(session.getAttribute("foto_cpf").toString().getBytes());
         } catch(Exception e ){
             retorno.put("mensagem", "O arquivo de foto do CPF não existe.");
             return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        if(ContaService.checkPasso1(conta.getPessoa()).get(false) != null){
-            retorno.put("mensagem", ContaService.checkPasso1(conta.getPessoa()).get(false));
+        if(ContaService.checkPasso1(proposta.getPessoa()).get(false) != null){
+            retorno.put("mensagem", ContaService.checkPasso1(proposta.getPessoa()).get(false));
             return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        if(ContaService.checkPasso2(conta.getEndereco()).get(false) != null){
-            retorno.put("mensagem", ContaService.checkPasso2(conta.getEndereco()).get(false));
+        if(ContaService.checkPasso2(proposta.getEndereco()).get(false) != null){
+            retorno.put("mensagem", ContaService.checkPasso2(proposta.getEndereco()).get(false));
             return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        if(ContaService.checkPasso3(conta.getFoto_cpf()).get(false) != null){
+        if(ContaService.checkPasso3(proposta.getFoto_cpf()).get(false) != null){
 
-            retorno.put("mensagem", ContaService.checkPasso3(conta.getFoto_cpf()).get(false));
+            retorno.put("mensagem", ContaService.checkPasso3(proposta.getFoto_cpf()).get(false));
             return new ResponseEntity(retorno, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if(aceite.get("aceite")){
             //TODO: enviar o email
 
+            //TODO: criar o objeto conta com a proposta
 
-            this.contaService.novaConta(conta);
+//            this.contaService.novaConta(proposta);
             retorno.put("Mensagem", "Um email será enviado");
             return new ResponseEntity(retorno, HttpStatus.OK);
         }
         //TODO: enviar o email implorando o aceitar fazer a conta
-        this.contaService.novaProposta(new Proposta(conta));
+        this.contaService.novaProposta(proposta);
         retorno.put("mensagem", "Proposta não aceita");
         return new ResponseEntity(retorno, HttpStatus.OK);
     }

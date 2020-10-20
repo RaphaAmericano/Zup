@@ -97,7 +97,7 @@ public class ContaService {
         return this.contaDAO.novaConta(conta);
     }
 
-    public Conta novaProposta(Proposta proposta){
+    public Proposta novaProposta(Proposta proposta){
         return this.contaDAO.novaProposta(proposta);
     }
 
