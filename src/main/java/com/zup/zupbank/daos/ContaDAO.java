@@ -2,7 +2,9 @@ package com.zup.zupbank.daos;
 
 import com.zup.zupbank.models.Conta;
 import com.zup.zupbank.models.Proposta;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ContaDAO {
 
     public Conta novaConta(Conta conta){

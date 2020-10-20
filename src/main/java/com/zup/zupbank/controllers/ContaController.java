@@ -5,9 +5,11 @@ import com.zup.zupbank.models.Endereco;
 import com.zup.zupbank.models.Pessoa;
 import com.zup.zupbank.models.Proposta;
 import com.zup.zupbank.services.ContaService;
+import com.zup.zupbank.services.MailService;
 import com.zup.zupbank.services.SessionService;
 import com.zup.zupbank.utils.RequestResponseFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +28,8 @@ public class ContaController {
 
     @Autowired
     private ContaService contaService;
-
+    @Autowired
+    private MailService mailService;
 
     @GetMapping
     public ResponseEntity<String> ping(){
@@ -174,10 +177,11 @@ public class ContaController {
 
 //            this.contaService.novaConta(proposta);
             retorno.put("Mensagem", "Um email será enviado");
+            mailService.sendEmail();
             return new ResponseEntity(retorno, HttpStatus.OK);
         }
         //TODO: enviar o email implorando o aceitar fazer a conta
-        this.contaService.novaProposta(proposta);
+        contaService.novaProposta(proposta);
         retorno.put("mensagem", "Proposta não aceita");
         return new ResponseEntity(retorno, HttpStatus.OK);
     }
