@@ -10,11 +10,13 @@ public class Conta {
     private long numeroConta;
     private int codigoBanco;
     private double saldo;
+    private boolean pendente;
 
     public Conta(Proposta proposta){
         this.proposta = proposta;
         this.setRandomValues();
         this.setSaldo(0.0);
+        this.setPendente(false);
     }
 
     private void setRandomValues(){
@@ -72,5 +74,13 @@ public class Conta {
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
+    }
+
+    public boolean isPendente() {
+        return pendente;
+    }
+
+    public void setPendente(boolean pendente) {
+        this.pendente = pendente;
     }
 }

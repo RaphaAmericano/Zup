@@ -1,6 +1,7 @@
 package com.zup.zupbank.services;
 
 import com.zup.zupbank.models.Conta;
+import com.zup.zupbank.models.Proposta;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -46,8 +47,13 @@ public class MailService {
                     + "Conta:" + (((Conta) contaProposta).getNumeroConta()) +"\r\n"
                     + "Código do banco:" + (((Conta) contaProposta).getCodigoBanco()) +"\r\n";
             retorno.put("conteudo", texto );
-        } else if(contaProposta instanceof Conta){
-
+        } else if(contaProposta instanceof Proposta){
+            retorno.put("destinatario", ((Proposta) contaProposta).getPessoa().getEmail());
+            retorno.put("assunto", "Reconsidere abrir uma conta em nosso banco!");
+            String texto = "Olá "+ ( ((Proposta) contaProposta).getPessoa().getNome() ) + "! Tudo bem?\r\n"
+                    + "Vimos que você não concluiu seu cadastro conosoco\r\n"
+                    + "Reconsidere abrir uma conta no Zup Bank\r\n";
+            retorno.put("conteudo", texto );
         }
         retorno.put("mensagem", "Erro ao gerar o email");
         return retorno;

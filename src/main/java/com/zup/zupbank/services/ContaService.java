@@ -93,8 +93,15 @@ public class ContaService {
         return retorno;
     }
 
-    public Conta novaConta(Conta conta){
-        return this.contaDAO.novaConta(conta);
+    public Boolean novaConta(Conta conta){
+        int tentativas = 2;
+        while(tentativas > 0 ){
+            if(this.contaDAO.novaConta(conta) != null){
+                return true;
+            }
+            --tentativas;
+        }
+        return true;
     }
 
     public Proposta novaProposta(Proposta proposta){
