@@ -1,9 +1,13 @@
 package com.zup.zupbank.services;
 
 
+import com.zup.zupbank.daos.ContaDAO;
+import com.zup.zupbank.models.Conta;
 import com.zup.zupbank.models.Endereco;
 import com.zup.zupbank.models.Pessoa;
+import com.zup.zupbank.models.Proposta;
 import com.zup.zupbank.utils.Validation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +16,9 @@ import java.util.Map;
 
 @Service
 public class ContaService {
+
+    @Autowired
+    private ContaDAO contaDAO;
 
     public static Map<Boolean, String> checkPasso1(Pessoa pessoa){
 
@@ -84,6 +91,14 @@ public class ContaService {
         }
         retorno.put(false, "Arquivo inválido");
         return retorno;
+    }
+
+    public Conta novaConta(Conta conta){
+        return this.contaDAO.novaConta(conta);
+    }
+
+    public Conta novaProposta(Proposta proposta){
+        return this.contaDAO.novaProposta(proposta);
     }
 
 }

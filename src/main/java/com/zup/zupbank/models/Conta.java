@@ -4,9 +4,9 @@ package com.zup.zupbank.models;
 import java.util.Date;
 
 public class Conta {
-    Pessoa pessoa;
-    Endereco endereco;
-    byte[] foto_cpf;
+    protected Pessoa pessoa;
+    protected Endereco endereco;
+    protected byte[] foto_cpf;
 
     public Pessoa getPessoa() {
         return pessoa;

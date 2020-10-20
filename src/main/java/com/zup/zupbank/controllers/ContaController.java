@@ -3,9 +3,11 @@ package com.zup.zupbank.controllers;
 import com.zup.zupbank.models.Conta;
 import com.zup.zupbank.models.Endereco;
 import com.zup.zupbank.models.Pessoa;
+import com.zup.zupbank.models.Proposta;
 import com.zup.zupbank.services.ContaService;
 import com.zup.zupbank.services.SessionService;
 import com.zup.zupbank.utils.RequestResponseFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,10 @@ import java.util.Map;
 public class ContaController {
 
     private static String UPLOADED_FOLDER = "/temp/";
+
+    @Autowired
+    private ContaService contaService;
+
 
     @GetMapping
     public ResponseEntity<String> ping(){
@@ -162,14 +168,15 @@ public class ContaController {
         }
 
         if(aceite.get("aceite")){
-            //TODO: mensagem informando o envio de email
-            //criar a conta
-            // enviar email
+            //TODO: enviar o email
+
+
+            this.contaService.novaConta(conta);
             retorno.put("Mensagem", "Um email será enviado");
             return new ResponseEntity(retorno, HttpStatus.OK);
         }
-        //TODO: registrar a proposta no sistema
-        //enviar o email implorando o aceitar fazer a conta
+        //TODO: enviar o email implorando o aceitar fazer a conta
+        this.contaService.novaProposta(new Proposta(conta));
         retorno.put("mensagem", "Proposta não aceita");
         return new ResponseEntity(retorno, HttpStatus.OK);
     }
