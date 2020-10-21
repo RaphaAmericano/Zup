@@ -104,6 +104,10 @@ public class ContaService {
         return true;
     }
 
+    public Conta getContaByEmail(String email, long cpf){
+        return contaDAO.getContaByEmail(email, cpf);
+    }
+
     public Proposta novaProposta(Proposta proposta){
         return this.contaDAO.novaProposta(proposta);
     }

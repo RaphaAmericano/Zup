@@ -12,6 +12,13 @@ public class Conta {
     private double saldo;
     private boolean pendente;
 
+    public Conta(){}
+
+    //
+    public Conta(String email){
+
+    }
+    //
     public Conta(Proposta proposta){
         this.proposta = proposta;
         this.setRandomValues();
